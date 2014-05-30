@@ -1,0 +1,132 @@
+body {
+  padding: 3em;
+  font-family: 'helvetica-neue', 'helvetica', sans-serif;
+  background-color: #222;
+}
+
+/* TYPOGRAPHY */
+
+a {
+  color: inherit;
+}
+
+
+.lookbook {
+  position: relative;
+  padding: 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.lookbook__picture {
+  display: block;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.lookbook__hotspot {
+  display: block;
+  text-indent: -999px;
+  overflow: hidden;
+  background-color: rgba(180,180,180,0.8);
+  background-color: rgba(216, 44, 38,0.95);
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  border-radius: 100%;
+  position: absolute;
+  border: 1px solid rgba(255,107,102,0.7);
+  -webkit-animation-name: bounceIn, shineIn, hotspotPulse;
+  -webkit-animation-duration: 0.5s, 1s, 3s;
+  -webkit-animation-fill-mode: both;
+  -webkit-animation-iteration-count: 1,1, infinite;
+}
+
+.lookbook__hotspot:hover {
+  background-color: rgba(216, 44, 38, 1);
+}
+
+.lookbook-popover {
+  position: absolute;
+  z-index: 9999;
+  width: 200px;
+  -webkit-animation-duration: 0.2s;
+  -webkit-animation-fill-mode: both;
+  -webkit-animation-name: bounceIn;
+  /*-webkit-transform-origin: right bottom;*/
+}
+
+.lookbook-popover__content {
+  background-color: #fff;
+  font-size: 90%;
+  padding: 1em;
+  border-radius: 0.3em;
+  box-shadow: 0 0 2em rgba(0,0,0,0.8);
+}
+
+.lookbook-popover__content img {
+  max-width: 100%;
+}
+
+
+
+/* ANIMATIONS */
+
+@-webkit-keyframes hotspotPulse {
+
+  0% {
+    opacity: 0.4
+  }
+
+  50% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: 0.6
+  }
+
+}
+
+@-webkit-keyframes shineIn {
+
+  0% {
+    opacity: 0;
+    background-color: rgba(216, 44, 38,0.8);
+  }
+
+  20% {
+    background-color: rgba(255,255,255,0.9);
+  }
+
+  100% {
+    opacity: 1
+    background-color: rgba(216, 44, 38,0.8);
+  }
+
+}
+
+
+@-webkit-keyframes bounceIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(.5);
+  }
+
+  70% {
+    opacity: 1;
+    -webkit-transform: scale(1.02);
+  }
+
+/*  99% {
+    -webkit-transform: scale(.99);
+    transform: scale(.99);
+  }*/
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
