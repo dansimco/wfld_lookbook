@@ -1,3 +1,5 @@
+var IAN = '10.80.32.67';
+
 (function () {
   var Lookbook;
 
@@ -76,7 +78,9 @@
     self.getProduct = function (productID) {
       console.log(productID);
       return $.ajax({
-        url: '/' + productID + '.json'
+        // url: '/' + productID + '.json'
+        // url: '/api/product/master/products/' + productID + '.json'
+        url: '/api/product/master/products/' + productID + '.json?api_key=mkypad9rymqm8fs5a6n3c8m8'
       });
     };
 
@@ -103,26 +107,49 @@
       var collectionSlug = el.href.split('?')[0].split('/')[6];
 
       $.ajax({
-        url: 'http://10.80.32.67:9292/api/canned-search/master/curations/' + collectionSlug + '.json'
-      }).done(function (r) {
-        console.log(r.data);
-      });
+        url: 'http://' + IAN + ':9292/api/canned-search/master/curations/' + collectionSlug + '.json'
+      }).done(function (colR) {
+        var col = colR.data;
+
+        console.log('http://' + IAN + ':9292/api/canned-search/master/curations/' + collectionSlug + '/hotspots');
+        $.ajax({
+          url: 'http://' + IAN + ':9292/api/canned-search/master/curations/' + collectionSlug + '/hotspots'
+        }).done(function (hotspotR) {
+          var hString = '<div class="lookbook">'
+          //Image
+          hString = hString + '<img src="https://res.cloudinary.com/wlabs/image/upload/' + col.image_ref + '.png">';
+          console.log('<img src="https://res.cloudinary.com/wlabs/image/upload/' + col.image_ref + '.png">');
+
+          hotspotR.data.forEach(function (hotspot, i) {
+            console.log(hotspot);
+            //Get Product Data
+            $.ajax({
+              url: '/api/product/master/products/' + hotspot.product_id + '.json?api_key=mkypad9rymqm8fs5a6n3c8m8'
+            }).done(function (p) {
+              console.log(p);
+              var href = 'http://www.westfield.com.au/products/' + p.retailer_code + '/' + p.name_slug + '/' + hotspot.product_id;
+              //A Tag
+              var tag = '<a class="lookbook__hotspot" style="left: ' + hotspot.x + '%; top: ' + hotspot.y + '%" href="' + 'http://www.westfield.com.au/products/' + p.retailer_code + '/' + p.name_slug + '/' + hotspot.product_id + '">' + p.name_slug + '</a>';
+              hString = hString + tag;
+              console.log(tag);
 
 
-      console.log('http://10.80.32.67:9292/api/canned-search/master/curations/' + collectionSlug + '/hotspots');
-      $.ajax({
-        url: 'http://10.80.32.67:9292/api/canned-search/master/curations/' + collectionSlug + '/hotspots'
-      }).done(function (r) {
-        r.data.forEach(function (hotspot) {
-          console.log(hotspot);
-          //Get Product Data
-          $.ajax({
-            url: '/api/product/master/products/' + hotspot.product_id + '.json?api_key=mkypad9rymqm8fs5a6n3c8m8'
-          }).done(function (r) {
-            console.log(r, 'http://www.westfield.com.au/products/' + r.retailer_code + '/' + r.name_slug + '/' + hotspot.product_id);
+              if (i == hotspotR.data.length - 1) {
+                console.log('last');
+                hString = hString + '</div>';
+                var lb = $(hString);
+                $(el).replaceWith(lb);
+                lb.lookbook();
+              }
+
+            });
           });
+
+
         });
+
       });
+
     });
   });
 }());
